@@ -25,11 +25,11 @@ class PhysicsDataset(Dataset):
     
 
 class LabeledDataset(Dataset):
-    def __init__(self, df:pd.DataFrame, device="cpu"):
+    def __init__(self, df:pd.DataFrame, step_lbl=20, device="cpu"):
         super().__init__()
         array_data = df.astype("float32").to_numpy()
-        x_cond = np.unique(array_data[:,0])[::-24]
-        y_cond = np.unique(array_data[:,1])[::-24]
+        x_cond = np.unique(array_data[:,0])[::step_lbl]
+        y_cond = np.unique(array_data[:,1])[::step_lbl]
         array_data = array_data[np.logical_and(np.in1d(array_data[:,0], x_cond) , np.in1d(array_data[:,1], y_cond))]
         self.data = torch.from_numpy(array_data).to(device)
     
